@@ -4,10 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
+
+	"github.com/Ha0cH/pokedex/internal/pokecache"
 )
 
 func main() {
 	cfg := &config{
+		cache: pokecache.NewCache(time.Minute * 5),
 		commands: map[string]cliCommand{
 			"exit": {
 				name:        "exit",

@@ -1,13 +1,13 @@
 package main
 
-type locationArea struct {
+type LocationArea struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
 }
 
-type locationAreasPage struct {
+type LocationAreasPage struct {
 	Count    int            `json:"count"`
 	Next     string         `json:"next"`
 	Previous string         `json:"previous"`
-	Results  []locationArea `json:"results"`
+	Results  []LocationArea `json:"results"`
 }
