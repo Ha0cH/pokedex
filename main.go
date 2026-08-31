@@ -33,6 +33,11 @@ func main() {
 				description: "Display the previous 20 location areas in the Pokemon world",
 				callback:    commandMapBack,
 			},
+			"explore": {
+				name:        "explore",
+				description: "Display all the pokenmons located in a location area",
+				callback:    commandExplore,
+			},
 		},
 		nextURL:     "https://pokeapi.co/api/v2/location-area/",
 		previousURL: "",
@@ -54,7 +59,7 @@ func main() {
 			continue
 		}
 
-		commandCall(cfg, cleaned[0])
+		commandCall(cfg, cleaned)
 	}
 
 }

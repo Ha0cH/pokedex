@@ -13,14 +13,17 @@ func cleanInput(text string) []string {
 	return words
 }
 
-func commandCall(cfg *config, cleanedInput string) {
-	cmd, ok := cfg.commands[cleanedInput]
+func commandCall(cfg *config, cleanedInput []string) {
+	commandName := cleanedInput[0]
+	args := cleanedInput[1:]
+
+	cmd, ok := cfg.commands[commandName]
 	if !ok {
 		fmt.Println("Unknown command")
 		return
 	}
 
-	if err := cmd.callback(cfg); err != nil {
+	if err := cmd.callback(cfg, args...); err != nil {
 		fmt.Println(err)
 	}
 }
