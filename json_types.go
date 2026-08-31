@@ -29,6 +29,27 @@ type LocationAreaDetail struct {
 
 // Pokemon endpoint
 type Pokemon struct {
-	Name           string `json:"name"`
-	BaseExperience int    `json:"base_experience"`
+	Name           string        `json:"name"`
+	BaseExperience int           `json:"base_experience"`
+	Height         int           `json:"height"`
+	Weight         int           `json:"weight"`
+	Stats          []PokemonStat `json:"stats"`
+	Types          []PokemonType `json:"types"`
+}
+
+type PokemonStat struct {
+	BaseStat int             `json:"base_stat"`
+	Stat     PokemonStatInfo `json:"stat"`
+}
+
+type PokemonStatInfo struct {
+	Name string `json:"name"`
+}
+
+type PokemonType struct {
+	Type PokemonTypeInfo `json:"type"`
+}
+
+type PokemonTypeInfo struct {
+	Name string `json:"name"`
 }

@@ -256,9 +256,56 @@ func commandCatch(cfg *config, args ...string) error {
 	if roll <= catchChance {
 		fmt.Printf("%s was caught!\n", pokemon.Name)
 		cfg.pokedex[pokemon.Name] = pokemon
+		fmt.Println("You may now inspect it with the inspect command")
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
 	}
 
+	return nil
+}
+
+func commandInspect(cfg *config, args ...string) error {
+	if len(args) != 1 {
+		return fmt.Errorf("Input must contain a pokemon name")
+	}
+
+	pokemonName := args[0]
+	pokemon, ok := cfg.pokedex[pokemonName]
+	if !ok {
+		fmt.Println("you have not caught that pokemon")
+		return nil
+	}
+
+	fmt.Printf("Name: %s\n", pokemon.Name)
+	fmt.Printf("Height: %d\n", pokemon.Height)
+	fmt.Printf("Weight: %d\n", pokemon.Weight)
+	fmt.Println("Stats:")
+
+	for _, stat := range pokemon.Stats {
+		fmt.Printf("  -%s: %d\n", stat.Stat.Name, stat.BaseStat)
+	}
+
+	fmt.Println("Types:")
+	for _, t := range pokemon.Types {
+		fmt.Printf("  - %s\n", t.Type.Name)
+	}
+
+	return nil
+}
+
+func commandPokedex(cfg *config, args ...string) error {
+	if len(args) != 0 {
+		return fmt.Errorf("Pokedex command does not accept argument.")
+	}
+
+	if len(cfg.pokedex) == 0 {
+		fmt.Println("You have not caught any pokemon")
+		return nil
+	}
+
+	fmt.Println("Your Pokedex:")
+	for name := range cfg.pokedex {
+		fmt.Printf(" - %s\n", name)
+	}
 	return nil
 }

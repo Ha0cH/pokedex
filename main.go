@@ -44,6 +44,16 @@ func main() {
 				description: "Try to catch a pokemon",
 				callback:    commandCatch,
 			},
+			"inspect": {
+				name:        "inspect",
+				description: "inspect a pokemon that you caught",
+				callback:    commandInspect,
+			},
+			"pokedex": {
+				name:        "pokedex",
+				description: "List all the pokemons you caught",
+				callback:    commandPokedex,
+			},
 		},
 		nextURL:     "https://pokeapi.co/api/v2/location-area/",
 		previousURL: "",
