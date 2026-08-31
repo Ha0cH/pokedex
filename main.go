@@ -11,7 +11,8 @@ import (
 
 func main() {
 	cfg := &config{
-		cache: pokecache.NewCache(time.Minute * 5),
+		cache:   pokecache.NewCache(time.Minute * 5),
+		pokedex: make(map[string]Pokemon),
 		commands: map[string]cliCommand{
 			"exit": {
 				name:        "exit",
@@ -37,6 +38,11 @@ func main() {
 				name:        "explore",
 				description: "Display all the pokenmons located in a location area",
 				callback:    commandExplore,
+			},
+			"catch": {
+				name:        "catch",
+				description: "Try to catch a pokemon",
+				callback:    commandCatch,
 			},
 		},
 		nextURL:     "https://pokeapi.co/api/v2/location-area/",

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -179,6 +180,84 @@ func commandMapBack(cfg *config, args ...string) error {
 
 	for _, item := range areas {
 		fmt.Println(item)
+	}
+
+	return nil
+}
+
+func getPokemon(cfg *config, name string) (Pokemon, error) {
+	url := "https://pokeapi.co/api/v2/pokemon/" + name
+	data, ok := cfg.cache.Get(url)
+	if !ok {
+		client := &http.Client{
+			Timeout: time.Second * 10,
+		}
+
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return Pokemon{}, err
+		}
+
+		resp, err := client.Do(req)
+		if err != nil {
+			return Pokemon{}, err
+		}
+
+		defer resp.Body.Close()
+
+		if resp.StatusCode > 299 {
+			return Pokemon{}, fmt.Errorf("request failed with status code %d", resp.StatusCode)
+		}
+
+		data, err = io.ReadAll(resp.Body)
+		if err != nil {
+			return Pokemon{}, err
+		}
+
+		cfg.cache.Add(url, data)
+	}
+
+	var p Pokemon
+	err := json.Unmarshal(data, &p)
+	if err != nil {
+		return Pokemon{}, err
+	}
+
+	return p, nil
+
+}
+
+func commandCatch(cfg *config, args ...string) error {
+	if len(args) != 1 {
+		return fmt.Errorf("Input must contain a valid pokemon name")
+	}
+
+	pokemon, err := getPokemon(cfg, args[0])
+	if err != nil {
+		return err
+	}
+
+	_, ok := cfg.pokedex[pokemon.Name]
+	if ok {
+		fmt.Println("you already caught this pokemon")
+		return nil
+	}
+
+	// try to catch it
+	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
+
+	catchChance := 100 - pokemon.BaseExperience/3
+	if catchChance < 5 {
+		catchChance = 5
+	}
+
+	roll := rand.Intn(100) + 1
+
+	if roll <= catchChance {
+		fmt.Printf("%s was caught!\n", pokemon.Name)
+		cfg.pokedex[pokemon.Name] = pokemon
+	} else {
+		fmt.Printf("%s escaped!\n", pokemon.Name)
 	}
 
 	return nil

@@ -7,4 +7,5 @@ type config struct {
 	nextURL     string
 	previousURL string
 	cache       *pokecache.Cache
+	pokedex     map[string]Pokemon
 }

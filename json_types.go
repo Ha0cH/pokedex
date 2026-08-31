@@ -26,3 +26,9 @@ type PokemonEncounter struct {
 type LocationAreaDetail struct {
 	PokemonEncounters []PokemonEncounter `json:"pokemon_encounters"`
 }
+
+// Pokemon endpoint
+type Pokemon struct {
+	Name           string `json:"name"`
+	BaseExperience int    `json:"base_experience"`
+}
